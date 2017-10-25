@@ -80,12 +80,6 @@ void calculate_beta(int *o, int T){
 
 void calculate_eps(int *o, int T){
 	double local_eps[1000][1000];
-	for(int i=0;i<1000;i++){
-		for(int j=0;j<1000;j++){
-			local_eps[i][j]=0.0;
-		}
-	}
-
 	for(int t=0;t<T-1;t++){
 		double total = 0.0;
 		for(int i=0;i<n;i++){
@@ -96,20 +90,36 @@ void calculate_eps(int *o, int T){
 		}
 		for(int i=0;i<n;i++){
 			for(int j=0;j<n;j++){
-				eps[i][j] += local_eps[i][j] / total;
+				eps[i][j] += (local_eps[i][j] / total);
 			}
 		}
 	}
 	return;
 }
+
+void calculate_gamma(int *o, int T){
+	double local_gamma[1000];
+	for(int t=0;t<T;t++){
+		double total = 0.0;
+		for(int i=0;i<N;i++){
+			gamma[t][i] = alpha[t][i] * beta[t][i];
+			total += gamma[t][i];
+		}
+		for(int i=0;i<N;i++){
+			gamma[t][i] /= total;
+		}
+	}
+	return;
+}
+
 void iteration(char *o){
 	int obs[1000];
 	int len = strlen(o);
-	for(int g=0;g<len;g++) obs[g] = o[g]='A';
+	for(int g=0;g<len;g++) obs[g] = o[g]-'A';
 	calculate_alpha(obs, len);
 	calculate_beta(obs, len);
 	calculate_eps(obs, len);
-	//calculate_gamma(obs, len);
+	calculate_gamma(obs, len);
 
 }
 
