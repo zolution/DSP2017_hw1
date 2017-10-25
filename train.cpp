@@ -15,7 +15,9 @@ double b[1000][1000];
 double alpha[1000][1000];
 double beta[1000][1000];
 double eps[1000][1000];
-double gamma[1000][1000];
+double gamma[1000];
+double gamma_full[1000];
+double gamma_bucket[1000][1000];
 int n;
 
 void init(){
@@ -102,13 +104,17 @@ void calculate_gamma(int *o, int T){
 	for(int t=0;t<T;t++){
 		double total = 0.0;
 		for(int i=0;i<N;i++){
-			gamma[t][i] = alpha[t][i] * beta[t][i];
-			total += gamma[t][i];
+			local_gamma[i] = alpha[t][i] * beta[t][i];
+			total += local_gamma[i];
 		}
 		for(int i=0;i<N;i++){
-			gamma[t][i] /= total;
+			local_gamma[i] /= total;
+			gamma[i] += local_gamma[i];
+			gamma_full[i] += local_gamma[i];
+			gamma_bucket[i][o[t]] += local_gamma[i];
 		}
 	}
+	gamma[i] -= local_gamma[i];
 	return;
 }
 
@@ -120,7 +126,6 @@ void iteration(char *o){
 	calculate_beta(obs, len);
 	calculate_eps(obs, len);
 	calculate_gamma(obs, len);
-
 }
 
 int main(int argc, char **argv){
