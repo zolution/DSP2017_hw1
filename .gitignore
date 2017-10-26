@@ -12,3 +12,4 @@ testing_answer.txt
 testing_data1.txt
 testing_data2.txt
 *.out
+.DS_Store

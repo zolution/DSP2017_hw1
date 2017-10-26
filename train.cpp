@@ -214,6 +214,6 @@ int main(int argc, char **argv){
 	input_init_model();
 	int num = read_observations();
 	for(int i=0;i<iteration_n;i++) iteration(num);
-	output_model(stdout);
+	output_model(out_file);
 	return 0;
 }

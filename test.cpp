@@ -19,7 +19,6 @@ using namespace std;
 
 void init_input_model(FILE *model_list){
 	while(fscanf(model_list,"%s",model_name[model_N])!=EOF){
-		cerr<<model_name[model_N]<<endl;
 		FILE *t_init_model = fopen(model_name[model_N],"r");
 		char temp[1000];
 		fscanf(t_init_model,"%s%d",temp,&n);
@@ -91,9 +90,8 @@ int main(int argc, char **argv){
 	}
 	FILE *model_list = fopen(argv[1],"r");
 	FILE *testing_data = fopen(argv[2], "r");
-	FILE *result = fopen(argv[3], "r");
+	FILE *result = fopen(argv[3], "w");
 	init_input_model(model_list);
-	cerr<<"YYYYYYYYYYYYYYY";
-	testing(testing_data,stdout);
+	testing(testing_data,result);
 
 }
