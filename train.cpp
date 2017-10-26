@@ -10,6 +10,8 @@
 using namespace std;
 FILE *t_data_input;
 FILE *t_init_model;
+FILE *out_file;
+
 char observations[10005][55];
 int trans_observations[10005][55];
 double pi[1000];
@@ -180,21 +182,21 @@ void iteration(int num){
 	update_pi(num);
 }
 
-void output_model(){
-	fprintf(stdout, "initial: %d\n", n);
+void output_model(FILE *dir){
+	fprintf(dir, "initial: %d\n", n);
 	for(int h=0;h<n;h++){
-		fprintf(stdout, "%.5f%c", pi[h], h==n-1?'\n':' ');
+		fprintf(dir, "%.5f%c", pi[h], h==n-1?'\n':' ');
 	}
-	fprintf(stdout, "\ntransition: %d\n", n);
+	fprintf(dir, "\ntransition: %d\n", n);
 	for(int h=0;h<n;h++){
 		for(int i=0;i<n;i++){
-			fprintf(stdout, "%.5f%c", a[h][i], i==n-1?'\n':' ');
+			fprintf(dir, "%.5f%c", a[h][i], i==n-1?'\n':' ');
 		}
 	}
-	fprintf(stdout, "\nobservation: %d\n", n);
+	fprintf(dir, "\nobservation: %d\n", n);
 	for(int h=0;h<n;h++){
 		for(int i=0;i<max_operation_class;i++){
-			fprintf(stdout, "%.5f%c", b[i][h], i==max_operation_class-1?'\n':' ');
+			fprintf(dir, "%.5f%c", b[i][h], i==max_operation_class-1?'\n':' ');
 		}
 	}
 	return;
@@ -207,11 +209,11 @@ int main(int argc, char **argv){
 	int iteration_n = atoi(argv[1]);
 	t_init_model = fopen(argv[2],"r");
 	t_data_input = fopen(argv[3],"r");
+	out_file = fopen(argv[4],"w");
 	init();
 	input_init_model();
 	int num = read_observations();
 	for(int i=0;i<iteration_n;i++) iteration(num);
-	output_model();
+	output_model(stdout);
 	return 0;
-
 }
